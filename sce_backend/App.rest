@@ -1,10 +1,20 @@
 ###
 
-GET http://localhost:3000/student
+GET http://localhost:3000/student/12345
 
 ###
 
-POST http://localhost:3000/student
+POST http://localhost:3000/student Content-Type: application/json
+
+{
+"name": "John 444", 
+"age": 20, 
+"_id": "02221233022"
+}
+
+###
+
+PUT http://localhost:3000/student
 
 ###
 
@@ -13,7 +23,3 @@ DELETE http://localhost:3000/student
 ###
 
 GET http://localhost:3000/post
-
-###
-
-PUT http://localhost:3000/post
