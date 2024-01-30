@@ -4,7 +4,9 @@ GET http://localhost:3000/student/12345
 
 ###
 
-POST http://localhost:3000/student Content-Type: application/json
+POST http://localhost:3000/student 
+
+Content-Type: application/json
 
 {
 "name": "John 444", 
