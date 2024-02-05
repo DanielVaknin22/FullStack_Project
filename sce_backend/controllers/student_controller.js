@@ -19,31 +19,42 @@ const getStudents = async (req, res) => {
 const getStudentsById = async (req, res) => {
     console.log(req.params);
     try {
-        const student = await Student.findById(req.params.id);
-        res.status(200).send(student);
+      const student = await Student.findById(req.params.id);
+      if (!student) {
+        return res.status(404).send("Student not found");
+      } else {
+        return res.status(200).send(student);
+      }
     } catch (error) {
-        console.log(error);
-        res.status(400).send(error.message);
+      console.log(error);
+      res.status(400).send(error.message);
     }
-};
+  };
 
 const postStudents = async (req, res) => {
     console.log("student post");
     try {
-        const student = await Student.create(req.body);
-        res.status(201).send(student);
+      const student = await Student.create(req.body);
+      res.status(201).send(student);
     } catch (error) {
-        console.log(error);
-        res.status(400).send(error.message);
+      console.log(error);
+      res.status(400).send(error.message);
     }
 };
 
 const putStudents = (req, res) => {
-    res.send("student put");
+  res.send("student put");
 };
 
-const deleteStudents = (req, res) => {
-    res.send("student delete");
+const deleteStudents = async (req, res) => {
+  res.send("student delete");
+  try {
+    await Student.findByIdAndDelete(req.params.id);
+    return res.status(200).send();
+  } catch (error) {
+    console.log(error);
+    res.status(400).send(error.message);
+  }
 };
 
 module.exports = { 
