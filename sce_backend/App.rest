@@ -4,7 +4,7 @@ GET http://localhost:3000/student
 
 ###
 
-GET http://localhost:3000/student?name=Jhon
+GET http://localhost:3000/student?name=Jhon3
 
 ###
 
@@ -16,9 +16,9 @@ POST http://localhost:3000/student
 Content-Type: application/json
 
 {
-  "name": "nadav",
-  "age": 25,
-  "_id": "12333333345"
+ "name": "John 444",
+  "age": 20,
+   "_id": "02221233022"
 }
 
 
