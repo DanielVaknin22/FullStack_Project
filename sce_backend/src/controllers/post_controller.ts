@@ -11,8 +11,6 @@ class PostController extends BaseController<IPost> {
         req.body.owner = req.body.user._id;
         super.post(req, res);
     }
-
-
 }
 
 export default new PostController();

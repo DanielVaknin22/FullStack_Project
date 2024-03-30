@@ -79,7 +79,6 @@ describe("Student", () => {
     expect(res.statusCode).toBe(404);
   });
 
-  //test delete student by id
   test("DELETE /student/:id", async () => {
     const res = await request(app).delete("/student/" + students[0]._id)
       .set('Authorization', 'Bearer ' + testUser.accessToken);
