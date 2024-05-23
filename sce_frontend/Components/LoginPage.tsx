@@ -1,27 +1,27 @@
 import React, { useState, FC } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, StatusBar } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
 
-const Login: FC<{ navigation: any }> = ({ navigation }) => {
-    const [username, setUsername] = useState<string>('');
+const LoginPage: FC<{ navigation: any }> = ({ navigation }) => {
+    const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
 
     const onLogin = async () => {
-        if (username.trim() === '' || password.trim() === '') {
-            Alert.alert('Error', 'Please enter both username and password');
+        if (email.trim() === '' || password.trim() === '') {
+            Alert.alert('Error', 'Please enter both email and password');
             return;
         }
 
         try {
-            const response = await axios.post('http://localhost:3000/auth/login', {
-                username,
+            const response = await axios.post('http://10.0.2.2:3000/auth/login', {
+                email,
                 password,
             });
             // You may want to store the token in local storage
             // localStorage.setItem('token', response.data.token);
             navigation.navigate('MainApp');
         } catch (err) {
-            Alert.alert('Error', 'Invalid username or password');
+            Alert.alert('Error', 'Invalid email or password');
         }
     };
 
@@ -30,9 +30,9 @@ const Login: FC<{ navigation: any }> = ({ navigation }) => {
             <Text style={styles.title}>Login</Text>
             <TextInput
                 style={styles.input}
-                placeholder="Username"
-                onChangeText={setUsername}
-                value={username}
+                placeholder="Email"
+                onChangeText={setEmail}
+                value={email}
                 autoCapitalize="none"
             />
             <TextInput
@@ -44,6 +44,9 @@ const Login: FC<{ navigation: any }> = ({ navigation }) => {
             />
             <TouchableOpacity style={styles.button} onPress={onLogin}>
                 <Text style={styles.buttonText}>LOGIN</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+                <Text style={styles.linkText}>Don't have an account? Register</Text>
             </TouchableOpacity>
         </View>
     );
@@ -84,6 +87,12 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
     },
+    linkText: {
+        color: '#007BFF',
+        fontSize: 16,
+        textAlign: 'center',
+        marginTop: 10,
+    },
 });
 
-export default Login;
+export default LoginPage;

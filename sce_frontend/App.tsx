@@ -8,6 +8,7 @@ import StudentAddPage from './Components/StudentAddPage';
 import StudentDetailsPage from './Components/StudentDetailsPage';
 import StudentListPage from './Components/StudentListPage';
 import LoginPage from './Components/LoginPage';
+import RegisterPage from './Components/RegisterPage';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -37,6 +38,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen name="Login" component={LoginPage} options={{ headerShown: false }} />
+        <Stack.Screen name="Register" component={RegisterPage} options={{ headerShown: false }} />
         <Stack.Screen name="MainApp" component={MainApp} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>

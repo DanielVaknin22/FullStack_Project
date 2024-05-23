@@ -1,7 +1,13 @@
+import UserApi from "../api/UserApi";
+import FormData from "form-data";
+
+
 export type User = {
-    name: string,
+    fullname: string,
     id: string,
-    imgUrl: string
+    imgUrl: string,
+    email: string,
+    password: string,
 }
 
 const data: User[] = [
@@ -25,5 +31,23 @@ const deleteStudent = (id: string) => {
         data.splice(index, 1);
     }
 }
+const uploadProfilePicture = async (imageURI: string) => {
+    var body = new FormData();
+    body.append('file', { name: "name", type: 'image/jpeg', uri: imageURI });
+    try {
+        const res = await UserApi.uploadProfilePicture(body)
+        if (!res.ok) {
+            console.log("save failed " + res.problem)
+        } else {
+            if (res.data) {
+                const d: any = res.data
+                console.log("save passed" + d.url)
+                return d.url
+            }
+        }
+    } catch (err) {
+        console.log("save failed " + err)
+    }
+}
 
-export default { getAllStudents, getStudent, addStudent, deleteStudent };
+export default { getAllStudents, getStudent, addStudent, deleteStudent, uploadProfilePicture };

@@ -5,15 +5,15 @@ import jwt from "jsonwebtoken";
 
 const register = async (req: Request, res: Response) => {
     console.log(req.body);
-    const email = req.body.email;
-    const password = req.body.password;
+    const { email, password, fullName, username } = req.body;
+    const profilePicture = req.file ? req.file.path : null;
 
-    if (email == null || password == null) {
-        return res.status(400).send("missing email or password");
+    if (!email || !password || !fullName || !username) {
+        return res.status(400).send("All fields are required");
     }
 
     try {
-        const user = await User.findOne({ email: email });
+        const user = await User.findOne({ email });
         if (user) {
             return res.status(400).send("user already exists");
         }
@@ -22,7 +22,10 @@ const register = async (req: Request, res: Response) => {
 
         const newUser = await User.create({
             email: email,
-            password: hashedPassword
+            password: hashedPassword,
+            fullName,
+            username,
+            profilePicture
         });
 
         return res.status(200).send(newUser);

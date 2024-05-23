@@ -1,6 +1,9 @@
 import express from "express";
 import authController from "../controllers/auth_controller";
 const router = express.Router();
+import multer from "multer";
+const upload = multer({ dest: 'uploads/' });
+
 
 /**
 * @swagger
@@ -76,7 +79,7 @@ const router = express.Router();
 *             schema:
 *               $ref: '#/components/schemas/User'
 */
-router.post("/register", authController.register);
+router.post("/register", upload.single('profilePicture'), authController.register);
 
 /**
 * @swagger
