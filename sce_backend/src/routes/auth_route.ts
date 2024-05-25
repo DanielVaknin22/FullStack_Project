@@ -174,4 +174,33 @@ router.get("/refresh", authController.refresh);
  */
 router.get("/user/:id", authController.getUserDetails);
 
+/**
+ * @swagger
+ * /auth/user/{userId}:
+ *   put:
+ *     summary: Update user details by ID
+ *     tags: [Auth]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: ID of the user to update
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       '200':
+ *         description: User details updated successfully
+ *       '404':
+ *         description: User not found
+ *       '500':
+ *         description: Internal server error
+ */
+router.put("/user/:id", upload.single('profilePicture'), authController.updateUserDetails);
+
 export default router;

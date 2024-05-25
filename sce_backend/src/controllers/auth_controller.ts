@@ -163,10 +163,42 @@ const getUserDetails = async (req: Request, res: Response) => {
     }
 };
 
+const updateUserDetails = async (req: Request, res: Response) => {
+    const userId = req.params.id;
+    const { email, fullName, username, password, profilePicture } = req.body;
+
+    try {
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+
+        if (email) user.email = email;
+        if (fullName) user.fullName = fullName;
+        if (username) user.username = username;
+        if (password) {
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(password, salt);
+            user.password = hashedPassword;
+        }
+        if (profilePicture) user.profilePicture = profilePicture;
+
+        await user.save();
+
+        return res.status(200).send(user);
+    } catch (error) {
+        console.log(error);
+        return res.status(400).send(error.message);
+    }
+};
+
+
 export default {
     register,
     login,
     logout,
     refresh,
     getUserDetails,
+    updateUserDetails,
 }

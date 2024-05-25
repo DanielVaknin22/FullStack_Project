@@ -1,5 +1,5 @@
 import React, { useEffect, useState, FC } from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, Button } from 'react-native';
 import axios from 'axios';
 import { User } from '../Model/UserModel';
 
@@ -9,11 +9,9 @@ const UserDetailPage: FC<{ route: any, navigation: any }> = ({ route, navigation
 
     useEffect(() => {
         const fetchUserDetails = async () => {
-            console.log('userId:', userId);
             try {
                 const response = await axios.get(`http://10.0.2.2:3000/auth/user/${userId}`);
                 setUser(response.data);
-                console.log('profile picture:', response.data.profilePicture);
             } catch (error) {
                 console.error('Error fetching user details:', error);
             }
@@ -21,6 +19,10 @@ const UserDetailPage: FC<{ route: any, navigation: any }> = ({ route, navigation
 
         fetchUserDetails();
     }, [userId]);
+
+    const handleEdit = () => {
+        navigation.navigate('EditUserPage', { userId });
+    };
 
     if (!user) {
         return (
@@ -32,9 +34,7 @@ const UserDetailPage: FC<{ route: any, navigation: any }> = ({ route, navigation
 
     const profilePictureUrl = user.profilePicture 
         ? `http://192.168.1.135:3000/${user.profilePicture.replace(/\\/g, '/')}` 
-        : require('../assets/avatar.jpeg');
-        console.log(profilePictureUrl);
-        
+        : require('../assets/avatar.jpeg');        
 
     return (
         <View style={styles.container}>
@@ -46,6 +46,8 @@ const UserDetailPage: FC<{ route: any, navigation: any }> = ({ route, navigation
             <Text style={styles.text}>Email: {user.email}</Text>
             <Text style={styles.text}>Full Name: {user.fullName}</Text>
             <Text style={styles.text}>Username: {user.username}</Text>
+            <Button title="Edit" onPress={handleEdit} />
+
         </View>
     );
 };
