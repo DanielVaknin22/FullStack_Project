@@ -2,7 +2,20 @@ import express from "express";
 import authController from "../controllers/auth_controller";
 const router = express.Router();
 import multer from "multer";
-const upload = multer({ dest: 'uploads/' });
+// const upload = multer({ dest: 'uploads/' });
+import path from 'path';
+
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
+    }
+});
+
+const upload = multer({ storage: storage });
 
 
 /**

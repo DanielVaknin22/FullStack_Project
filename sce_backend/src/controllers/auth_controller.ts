@@ -9,13 +9,13 @@ const register = async (req: Request, res: Response) => {
     const profilePicture = req.file ? req.file.path : null;
 
     if (!email || !password || !fullName || !username) {
-        return res.status(400).send("All fields are required");
+        return res.status(400).send('All fields are required');
     }
 
     try {
         const user = await User.findOne({ email });
         if (user) {
-            return res.status(400).send("user already exists");
+            return res.status(400).send('User already exists');
         }
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
@@ -33,7 +33,7 @@ const register = async (req: Request, res: Response) => {
         console.log(error);
         return res.status(400).send(error.message);
     }
-}
+};
 
 
 const generateTokens = (userId: string): { accessToken: string, refreshToken: string } => {
@@ -140,11 +140,27 @@ const refresh = async (req: Request, res: Response) => {
             return res.status(400).send(error.message);
         }
     });
-}
+};
+
+const getUserDetails = async (req: Request, res: Response) => {
+    const userId = req.params.id; // Assume user ID is passed as a URL parameter
+
+    try {
+        const user = await User.findById(userId).select('email fullName username profilePicture');
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+        res.status(200).send(user);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Server error');
+    }
+};
 
 export default {
     register,
     login,
     logout,
-    refresh
+    refresh,
+    getUserDetails,
 }
