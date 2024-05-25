@@ -1,6 +1,7 @@
 import React, { useState, FC } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
+import * as SecureStore from 'expo-secure-store';
 
 const LoginPage: FC<{ navigation: any }> = ({ navigation }) => {
     const [email, setEmail] = useState<string>('');
@@ -18,6 +19,8 @@ const LoginPage: FC<{ navigation: any }> = ({ navigation }) => {
                 password,
             });
             const userId = response.data.userId;
+            const { accessToken } = response.data;
+            await SecureStore.setItemAsync('authToken', accessToken);
             navigation.navigate('MainApp', { screen: 'UserDetails', params: { userId } });
         } catch (err) {
             Alert.alert('Error', 'Invalid email or password');
