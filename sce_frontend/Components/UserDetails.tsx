@@ -7,7 +7,6 @@ const UserDetailPage: FC<{ route: any, navigation: any }> = ({ route, navigation
     const { userId } = route.params;
     const [user, setUser] = useState<User | null>(null);
 
-    useEffect(() => {
         const fetchUserDetails = async () => {
             try {
                 const response = await axios.get(`http://10.0.2.2:3000/auth/user/${userId}`);
@@ -17,8 +16,17 @@ const UserDetailPage: FC<{ route: any, navigation: any }> = ({ route, navigation
             }
         };
 
-        fetchUserDetails();
-    }, [userId]);
+        useEffect(() => {
+            fetchUserDetails();
+        }, []);
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            fetchUserDetails();
+        });
+
+        return unsubscribe;
+    }, [navigation]);
 
     const handleEdit = () => {
         navigation.navigate('EditUserPage', { userId });

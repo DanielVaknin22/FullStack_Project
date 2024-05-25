@@ -40,12 +40,13 @@ const EditUserPage: FC<{ route: any, navigation: any }> = ({ route, navigation }
             formData.append('password', password);
         }
         if (profilePicture) {
-            const filename = profilePicture.split('/').pop();
-            const fileExtension = filename.split('.').pop();
+            const fileName = profilePicture.split('/').pop();
+            const match = /\.(\w+)$/.exec(fileName || '');
+            const type = match ? `image/${match[1]}` : 'image';
             formData.append('profilePicture', {
                 uri: profilePicture,
-                name: filename,
-                type: `image/${fileExtension}`,
+                name: fileName,
+                type: type,
             } as any);
         }
 
@@ -74,10 +75,6 @@ const EditUserPage: FC<{ route: any, navigation: any }> = ({ route, navigation }
             aspect: [4, 3],
             quality: 1,
         });
-
-        if (!result.canceled) {
-            setProfilePicture(result.uri);
-        }
     };
 
     if (!user) {
@@ -87,7 +84,9 @@ const EditUserPage: FC<{ route: any, navigation: any }> = ({ route, navigation }
             </View>
         );
     }
-
+    const onCancel = () => {
+        navigation.goBack();
+    };
     return (
         <View style={styles.container}>
             <TouchableOpacity onPress={pickImage}>
@@ -101,6 +100,7 @@ const EditUserPage: FC<{ route: any, navigation: any }> = ({ route, navigation }
             <TextInput style={styles.input} value={fullName} onChangeText={setFullName} placeholder="Full Name" />
             <TextInput style={styles.input} value={username} onChangeText={setUsername} placeholder="Username" />
             <TextInput style={styles.input} value={password} onChangeText={setPassword} placeholder="Password" secureTextEntry />
+            <Button title="Cancel" onPress={onCancel} />
             <Button title="Save" onPress={handleUpdate} />
         </View>
     );

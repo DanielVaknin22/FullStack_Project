@@ -165,11 +165,15 @@ const getUserDetails = async (req: Request, res: Response) => {
 
 const updateUserDetails = async (req: Request, res: Response) => {
     const userId = req.params.id;
-    const { email, fullName, username, password, profilePicture } = req.body;
+    const { email, fullName, username, password } = req.body;
+    const profilePicture = req.file ? req.file.path : null;
+
+    if (!userId) {
+        return res.status(400).send('User ID is missing');
+    }
 
     try {
         const user = await User.findById(userId);
-
         if (!user) {
             return res.status(404).send('User not found');
         }
@@ -179,20 +183,17 @@ const updateUserDetails = async (req: Request, res: Response) => {
         if (username) user.username = username;
         if (password) {
             const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash(password, salt);
-            user.password = hashedPassword;
+            user.password = await bcrypt.hash(password, salt);
         }
         if (profilePicture) user.profilePicture = profilePicture;
 
         await user.save();
-
-        return res.status(200).send(user);
+        res.status(200).send(user);
     } catch (error) {
         console.log(error);
-        return res.status(400).send(error.message);
+        res.status(500).send('Server error');
     }
 };
-
 
 export default {
     register,

@@ -11,6 +11,7 @@ import LoginPage from './Components/LoginPage';
 import RegisterPage from './Components/RegisterPage';
 import UserDetails from './Components/UserDetails';
 import EditUserPage from './Components/EditUserPage';
+import RecipeUpload from './Components/RecipeUploadPage';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -24,6 +25,8 @@ const StudentsListScreen: FC = () => {
       <StudentsListStack.Screen name="StudentAddPage" component={StudentAddPage} options={{ title: 'Add New Student' }} />
       <StudentsListStack.Screen name="UserDetails" component={UserDetails} options={{ title: 'User Details' }} />
       <StudentsListStack.Screen name="EditUserPage" component={EditUserPage} options={{ title: 'Edit User' }} />
+      <StudentsListStack.Screen name="RecipeUpload" component={EditUserPage} options={{ title: 'Edit User' }} />
+
     </StudentsListStack.Navigator>
   );
 };
@@ -32,7 +35,7 @@ const MainApp: FC = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen name="StudentsListScreen" component={StudentsListScreen} options={{ headerShown: false }} />
-      <Tab.Screen name="StudentAddPage" component={StudentAddPage} options={{ title: 'Add New Student' }} />
+      <Tab.Screen name="RecipeUpload" component={RecipeUpload} options={{ title: 'Recipe Upload' }} />
       <Tab.Screen name="UserDetails" component={UserDetails} options={{ title: 'UserDetails' }} />
 
     </Tab.Navigator>
