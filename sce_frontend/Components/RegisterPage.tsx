@@ -101,7 +101,9 @@ const RegisterPage: FC<{ navigation: any }> = ({ navigation }) => {
             </TouchableOpacity>
             {profilePictureURI ? (
                 <Image source={{ uri: profilePictureURI }} style={styles.profilePicture} />
-            ) : null}
+            ) :                 
+                <Image source={require('../assets/avatar.jpeg')} style={styles.profilePicture} />
+        }
             <TouchableOpacity style={styles.button} onPress={onRegister}>
                 <Text style={styles.buttonText}>REGISTER</Text>
             </TouchableOpacity>
