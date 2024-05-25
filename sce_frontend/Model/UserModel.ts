@@ -3,9 +3,10 @@ import FormData from "form-data";
 
 
 export type User = {
-    fullname: string,
+    fullName: string,
+    username: string,
     id: string,
-    imgUrl: string,
+    profilePicture: string,
     email: string,
     password: string,
 }

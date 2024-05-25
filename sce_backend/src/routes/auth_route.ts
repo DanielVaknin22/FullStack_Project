@@ -18,6 +18,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 
+
 /**
 * @swagger
 * tags:
@@ -149,4 +150,28 @@ router.post("/logout", authController.logout);
 *               $ref: '#/components/schemas/Tokens'
 */
 router.get("/refresh", authController.refresh);
+
+/**
+ * @swagger
+ * /auth/user/{userId}:
+ *   get:
+ *     summary: Get user details by ID
+ *     tags: [Auth]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: ID of the user to retrieve
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: User details retrieved successfully
+ *       '404':
+ *         description: User not found
+ *       '500':
+ *         description: Internal server error
+ */
+router.get("/user/:id", authController.getUserDetails);
+
 export default router;

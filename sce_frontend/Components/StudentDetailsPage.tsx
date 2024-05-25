@@ -7,7 +7,7 @@ const StudentDetailsPage: FC<{ route: any, navigation: any }> = ({ route, naviga
     const student = UserModel.getStudent(route.params.id);
     useEffect(() => {
         navigation.setOptions({
-            title: student?.name,
+            title: student?.fullname,
             headerRight: () => (
                 <Button
                     onPress={() => navigation.navigate('StudentAddPage')}
@@ -22,7 +22,7 @@ const StudentDetailsPage: FC<{ route: any, navigation: any }> = ({ route, naviga
     return (
         <View style={styles.container}>
             <Image style={styles.avatar} source={require('../assets/avatar.jpeg')} />
-            <Text style={styles.input}>{student?.name}</Text>
+            <Text style={styles.input}>{student?.fullname}</Text>
             <Text style={styles.input}>{student?.id}</Text>
             <Text style={styles.input}>{student?.imgUrl}</Text>
         </View>

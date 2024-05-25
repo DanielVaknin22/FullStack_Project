@@ -9,6 +9,7 @@ import StudentDetailsPage from './Components/StudentDetailsPage';
 import StudentListPage from './Components/StudentListPage';
 import LoginPage from './Components/LoginPage';
 import RegisterPage from './Components/RegisterPage';
+import UserDetails from './Components/UserDetails';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -20,6 +21,7 @@ const StudentsListScreen: FC = () => {
       <StudentsListStack.Screen name="StudentListPage" component={StudentListPage} options={{ title: 'Students List' }} />
       <StudentsListStack.Screen name="StudentDetailsPage" component={StudentDetailsPage} options={{ title: 'Student Details' }} />
       <StudentsListStack.Screen name="StudentAddPage" component={StudentAddPage} options={{ title: 'Add New Student' }} />
+      <StudentsListStack.Screen name="UserDetails" component={UserDetails} options={{ title: 'User Details' }} />
     </StudentsListStack.Navigator>
   );
 };
@@ -29,6 +31,8 @@ const MainApp: FC = () => {
     <Tab.Navigator>
       <Tab.Screen name="StudentsListScreen" component={StudentsListScreen} options={{ headerShown: false }} />
       <Tab.Screen name="StudentAddPage" component={StudentAddPage} options={{ title: 'Add New Student' }} />
+      <Tab.Screen name="UserDetails" component={UserDetails} options={{ title: 'UserDetails' }} />
+
     </Tab.Navigator>
   );
 };
@@ -39,6 +43,7 @@ export default function App() {
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen name="Login" component={LoginPage} options={{ headerShown: false }} />
         <Stack.Screen name="Register" component={RegisterPage} options={{ headerShown: false }} />
+        <Stack.Screen name="UserDetails" component={UserDetails} options={{ headerShown: false }} />
         <Stack.Screen name="MainApp" component={MainApp} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>

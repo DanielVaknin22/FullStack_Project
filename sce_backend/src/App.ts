@@ -7,6 +7,8 @@ import studentRoute from "./routes/student_route";
 import postRoute from "./routes/post_route";
 import bodyParser from "body-parser";
 import authRoute from "./routes/auth_route";
+import path from "path";
+
 
 const initApp = () => {
   const promise = new Promise<Express>((resolve) => {
@@ -19,6 +21,7 @@ const initApp = () => {
       app.use("/student", studentRoute);
       app.use("/post", postRoute);
       app.use("/auth", authRoute);
+      app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
       resolve(app);
     })
   });

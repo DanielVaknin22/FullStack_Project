@@ -82,8 +82,11 @@ const login = async (req: Request, res: Response) => {
         } else {
             user.tokens.push(refreshToken);
         }
+        console.log('user id after login in the backend:', user._id);
+        
         await user.save();
         return res.status(200).send({
+            userId: user._id,
             accessToken: accessToken,
             refreshToken: refreshToken
         });
@@ -91,7 +94,7 @@ const login = async (req: Request, res: Response) => {
         console.log(error);
         return res.status(400).send(error.message);
     }
-}
+};
 
 const logout = (req: Request, res: Response) => {
     res.status(400).send("logout");
@@ -143,10 +146,13 @@ const refresh = async (req: Request, res: Response) => {
 };
 
 const getUserDetails = async (req: Request, res: Response) => {
-    const userId = req.params.id; // Assume user ID is passed as a URL parameter
-
+    const userId = req.params.id; 
+    console.log('userID in the backend:', userId);
+    if (!userId) {
+        return res.status(400).send('User ID is missing');
+    }
     try {
-        const user = await User.findById(userId).select('email fullName username profilePicture');
+        const user = await User.findById(userId);
         if (!user) {
             return res.status(404).send('User not found');
         }

@@ -17,9 +17,8 @@ const LoginPage: FC<{ navigation: any }> = ({ navigation }) => {
                 email,
                 password,
             });
-            // You may want to store the token in local storage
-            // localStorage.setItem('token', response.data.token);
-            navigation.navigate('MainApp');
+            const userId = response.data.userId;
+            navigation.navigate('MainApp', { screen: 'UserDetails', params: { userId } });
         } catch (err) {
             Alert.alert('Error', 'Invalid email or password');
         }
