@@ -18,9 +18,9 @@ const LoginPage: FC<{ navigation: any }> = ({ navigation }) => {
                 email,
                 password,
             });
-            const userId = response.data.userId;
-            const { accessToken } = response.data;
+            const {userId, accessToken} = response.data;
             await SecureStore.setItemAsync('authToken', accessToken);
+            await SecureStore.setItemAsync('userId', userId);
             navigation.navigate('MainApp', { screen: 'UserDetails', params: { userId } });
         } catch (err) {
             Alert.alert('Error', 'Invalid email or password');

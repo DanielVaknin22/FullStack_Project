@@ -4,6 +4,7 @@ interface IRecipe {
     name: string;
     description: string;
     image: string;
+    userId: string;
 }
 
 const RecipeSchema = new mongoose.Schema<IRecipe>({
@@ -17,6 +18,9 @@ const RecipeSchema = new mongoose.Schema<IRecipe>({
     },
     image: { 
         type: String, 
+    },
+    userId: {
+        type: String,
     },
 });
 

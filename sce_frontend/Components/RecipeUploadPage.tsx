@@ -2,6 +2,8 @@ import React, { useState, FC } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, Image, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import * as ImagePicker from 'expo-image-picker';
+import * as SecureStore from 'expo-secure-store';
+
 
 const RecipeUploadPage: FC<{ navigation: any }> = ({ navigation }) => {
     const [name, setName] = useState('');
@@ -9,9 +11,17 @@ const RecipeUploadPage: FC<{ navigation: any }> = ({ navigation }) => {
     const [image, setImage] = useState<string | null>(null);
 
     const handleUpload = async () => {
+        const userId = await SecureStore.getItemAsync('userId');
+        if (!userId) {
+            console.error('User ID not found');
+            return;
+        }
+
         const formData = new FormData();
         formData.append('name', name);
         formData.append('description', description);
+        formData.append('userId', userId);
+
 
         if (image) {
             const fileName = image.split('/').pop();

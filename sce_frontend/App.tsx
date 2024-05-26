@@ -1,9 +1,8 @@
-import { StyleSheet, StatusBar, View, ActivityIndicator } from 'react-native';
-import React, { FC, useEffect, useState } from 'react';
+import { StyleSheet, StatusBar } from 'react-native';
+import React, { FC } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import * as SecureStore from 'expo-secure-store';
 
 import StudentAddPage from './Components/StudentAddPage';
 import StudentDetailsPage from './Components/StudentDetailsPage';
@@ -43,28 +42,10 @@ const MainApp: FC = () => {
   );
 };
 
-
 export default function App() {
-  const [initialRoute, setInitialRoute] = useState<string | null>(null);
-
-  useEffect(() => {
-    const checkToken = async () => {
-      const token = await SecureStore.getItemAsync('authToken');
-      setInitialRoute(token ? 'MainApp' : 'Login');
-    };
-    checkToken();
-  }, []);
-
-  if (!initialRoute) {
-    return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
-  }
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={initialRoute}>
+      <Stack.Navigator initialRouteName="Login">
         <Stack.Screen name="Login" component={LoginPage} options={{ headerShown: false }} />
         <Stack.Screen name="Register" component={RegisterPage} options={{ headerShown: false }} />
         <Stack.Screen name="UserDetails" component={UserDetails} options={{ headerShown: false }} />
@@ -80,10 +61,5 @@ const styles = StyleSheet.create({
     marginTop: StatusBar.currentHeight,
     flex: 1,
     flexDirection: 'column',
-  },
-  loaderContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });

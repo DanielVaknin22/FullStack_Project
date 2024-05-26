@@ -1,18 +1,24 @@
 import { Request, Response } from 'express';
 import Recipe from '../models/recipe_model';
+import User from '../models/user_model'; 
 
 export const uploadRecipe = async (req: Request, res: Response) => {
   try {
-    const { name, description } = req.body;
+    const { name, description, userId } = req.body;
     const image = req.file?.path;
 
     const recipe = new Recipe({
       name,
       description,
       image,
+      userId
     });
 
-    await recipe.save();
+    const savedRecipe = await recipe.save();
+
+    await User.findByIdAndUpdate(userId, {
+      $push: { recipes: savedRecipe._id }
+  });
     res.status(201).json(recipe);
   } catch (error) {
     res.status(500).json({ message: 'Failed to upload recipe', error });

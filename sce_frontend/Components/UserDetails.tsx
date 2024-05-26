@@ -2,12 +2,19 @@ import React, { useEffect, useState, FC } from 'react';
 import { StyleSheet, Text, View, Image, Button } from 'react-native';
 import axios from 'axios';
 import { User } from '../Model/UserModel';
+import * as SecureStore from 'expo-secure-store';
+
 
 const UserDetailPage: FC<{ route: any, navigation: any }> = ({ route, navigation }) => {
     const { userId } = route.params;
     const [user, setUser] = useState<User | null>(null);
 
         const fetchUserDetails = async () => {
+            const userId = await SecureStore.getItemAsync('userId');
+        if (!userId) {
+            console.error('User ID not found');
+            return;
+        }
             try {
                 const response = await axios.get(`http://10.0.2.2:3000/auth/user/${userId}`);
                 setUser(response.data);
