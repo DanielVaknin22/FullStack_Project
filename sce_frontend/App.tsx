@@ -12,6 +12,8 @@ import RegisterPage from './Components/RegisterPage';
 import UserDetails from './Components/UserDetails';
 import EditUserPage from './Components/EditUserPage';
 import RecipeUpload from './Components/RecipeUploadPage';
+import UserRecipesPage from './Components/UserRecipesPage';
+import EditRecipePage from './Components/EditRecipePage';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -25,7 +27,9 @@ const StudentsListScreen: FC = () => {
       <StudentsListStack.Screen name="StudentAddPage" component={StudentAddPage} options={{ title: 'Add New Student' }} />
       <StudentsListStack.Screen name="UserDetails" component={UserDetails} options={{ title: 'User Details' }} />
       <StudentsListStack.Screen name="EditUserPage" component={EditUserPage} options={{ title: 'Edit User' }} />
-      <StudentsListStack.Screen name="RecipeUpload" component={EditUserPage} options={{ title: 'Edit User' }} />
+      <StudentsListStack.Screen name="RecipeUpload" component={RecipeUpload} options={{ title: 'Edit User' }} />
+      <StudentsListStack.Screen name="UserRecipesPage" component={UserRecipesPage} options={{ title: 'My Recipe' }} />
+      <StudentsListStack.Screen name="EditRecipePage" component={EditRecipePage} options={{ title: 'Edit Recipe' }} />
 
     </StudentsListStack.Navigator>
   );
@@ -35,8 +39,8 @@ const MainApp: FC = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen name="StudentsListScreen" component={StudentsListScreen} options={{ headerShown: false }} />
-      <Tab.Screen name="RecipeUpload" component={RecipeUpload} options={{ title: 'Recipe Upload' }} />
-      <Tab.Screen name="UserDetails" component={UserDetails} options={{ title: 'UserDetails' }} />
+      <Tab.Screen name="UserRecipesPage" component={UserRecipesPage} options={{ title: 'My Recipe' }} />
+      <Tab.Screen name="UserDetails" component={UserDetails} options={{ title: 'User Details' }} />
 
     </Tab.Navigator>
   );
@@ -51,6 +55,10 @@ export default function App() {
         <Stack.Screen name="UserDetails" component={UserDetails} options={{ headerShown: false }} />
         <Stack.Screen name="MainApp" component={MainApp} options={{ headerShown: false }} />
         <Stack.Screen name="EditUserPage" component={EditUserPage} options={{ headerShown: false }} />
+        <Stack.Screen name="UserRecipesPage" component={UserRecipesPage} options={{ headerShown: false }} />
+        <Stack.Screen name="RecipeUpload" component={RecipeUpload} options={{ headerShown: false }} />
+        <Stack.Screen name="EditRecipePage" component={EditRecipePage} options={{ headerShown: false }} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

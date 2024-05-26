@@ -3,6 +3,8 @@ import { StyleSheet, Text, View, TextInput, Button, Image, TouchableOpacity } fr
 import axios from 'axios';
 import * as ImagePicker from 'expo-image-picker';
 import * as SecureStore from 'expo-secure-store';
+import { CommonActions } from '@react-navigation/native';
+
 
 
 const RecipeUploadPage: FC<{ navigation: any }> = ({ navigation }) => {
@@ -41,10 +43,21 @@ const RecipeUploadPage: FC<{ navigation: any }> = ({ navigation }) => {
                 },
             });
             console.log('Recipe uploaded:', response.data);
-            navigation.goBack();
+            navigation.dispatch(
+                CommonActions.navigate({
+                    name: 'MainApp',
+                    params: {
+                        screen: 'UserRecipesPage'
+                    },
+                })
+            );        
         } catch (error) {
             console.error('Error uploading recipe:', error);
         }
+    };
+
+    const onCancel = () => {
+        navigation.goBack();
     };
 
     const pickImage = async () => {
@@ -88,6 +101,7 @@ const RecipeUploadPage: FC<{ navigation: any }> = ({ navigation }) => {
                 placeholder="Recipe Description"
                 multiline
             />
+            <Button title="Cancel" onPress={onCancel} />
             <Button title="Upload Recipe" onPress={handleUpload} />
         </View>
     );
