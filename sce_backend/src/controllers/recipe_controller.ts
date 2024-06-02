@@ -26,6 +26,27 @@ export const uploadRecipe = async (req: Request, res: Response) => {
   }
 };
 
+export const getRecipeById = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const recipes = await Recipe.find({ userId });
+
+    const recipesWithName = await Promise.all(recipes.map(async (recipe) => {
+      const user = await User.findById(recipe.userId);
+      const fullname = user ? user.fullName : 'Unknown';
+      return {
+        ...recipe.toObject(),
+        fullname
+      };
+    }));
+    res.status(200).json(recipesWithName);
+  } catch (error) {
+    console.error('Error fetching recipes:', error);
+    res.status(500).json({ message: 'Server error', error });
+  }
+};
+
+
 
 export const getRecipe = async (req: Request, res: Response) => {
   try {
@@ -93,4 +114,5 @@ export default {
     updateRecipe,
     deleteRecipe,
     getAllRecipes,
+    getRecipeById
 };

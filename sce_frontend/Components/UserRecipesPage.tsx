@@ -1,5 +1,5 @@
 import React, { useEffect, useState, FC } from 'react';
-import { StyleSheet, Text, View, FlatList, Image, Button } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Image, Button, Alert, ActivityIndicator } from 'react-native';
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import { useFocusEffect } from '@react-navigation/native';
@@ -9,10 +9,12 @@ interface Recipe {
     name: string;
     description: string;
     image: string;
+    fullname: string;
 }
 
 const UserRecipesPage: FC<{ navigation: any }> = ({ navigation }) => {
     const [recipes, setRecipes] = useState<Recipe[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
 
     const fetchUserRecipes = async () => {
         try {
@@ -21,10 +23,13 @@ const UserRecipesPage: FC<{ navigation: any }> = ({ navigation }) => {
                 console.error('User ID not found');
                 return;
             }
-            const response = await axios.get(`http://192.168.1.135:3000/recipe/${userId}`);
+            const response = await axios.get(`http://192.168.1.135:3000/recipe/user/${userId}`);
             setRecipes(response.data);
         } catch (error) {
             console.error('Error fetching recipes:', error);
+            Alert.alert('Error', 'Failed to fetch recipes');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -53,12 +58,20 @@ const UserRecipesPage: FC<{ navigation: any }> = ({ navigation }) => {
         try {
             await axios.delete(`http://192.168.1.135:3000/recipe/${recipeId}`);
             setRecipes(recipes.filter(recipe => recipe._id !== recipeId));
-            alert('Recipe deleted successfully');
+            Alert.alert('Success', 'Recipe deleted successfully');
         } catch (error) {
             console.error('Error deleting recipe:', error);
-            alert('Failed to delete recipe');
+            Alert.alert('Error', 'Failed to delete recipe');
         }
     };
+
+    if (loading) {
+        return (
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#0000ff" />
+            </View>
+        );
+    }
 
     return (
         <View style={styles.container}>
@@ -75,6 +88,7 @@ const UserRecipesPage: FC<{ navigation: any }> = ({ navigation }) => {
                         )}
                         <Text style={styles.name}>{item.name}</Text>
                         <Text style={styles.description}>{item.description}</Text>
+                        <Text style={styles.fullname}>{item.fullname}</Text>
                         <Button title="Edit" onPress={() => handleEditRecipe(item._id)} />
                         <Button title="Delete" onPress={() => handleDeleteRecipe(item._id)} />
                     </View>
@@ -89,6 +103,11 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 20,
         backgroundColor: '#f5f5f5',
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     recipeItem: {
         marginBottom: 20,
@@ -110,6 +129,10 @@ const styles = StyleSheet.create({
         marginVertical: 10,
     },
     description: {
+        fontSize: 16,
+        color: '#666',
+    },
+    fullname: {
         fontSize: 16,
         color: '#666',
     },

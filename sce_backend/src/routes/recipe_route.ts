@@ -21,5 +21,7 @@ router.get('/:userId', recipeController.getRecipe);
 router.put('/:recipeId', recipeController.updateRecipe);
 router.delete('/:recipeId', recipeController.deleteRecipe);
 router.get('/recipes', recipeController.getAllRecipes);
+router.get('/user/:userId', recipeController.getRecipeById);
+
 
 export default router;
