@@ -14,7 +14,7 @@ const LoginPage: FC<{ navigation: any }> = ({ navigation }) => {
         }
 
         try {
-            const response = await axios.post('http://10.0.2.2:3000/auth/login', {
+            const response = await axios.post('http://192.168.1.135:3000/auth/login', {
                 email,
                 password,
             });

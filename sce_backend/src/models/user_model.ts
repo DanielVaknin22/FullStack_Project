@@ -5,7 +5,7 @@ export interface IUser {
     password: string;
     fullName: string;
     username: string;
-    recipes: string;
+    recipes: mongoose.Types.ObjectId[];
     profilePicture?: string;
     tokens: string[];
 }
@@ -29,9 +29,10 @@ const userSchema = new mongoose.Schema<IUser>({
         required: true,
         unique: true,
     },
-    recipes: {
-        type: String,
-    },
+    recipes: [{ 
+        type: mongoose.Schema.Types.ObjectId,
+         ref: 'Recipe' 
+    }],
     profilePicture: {
         type: String,
     },

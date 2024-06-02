@@ -37,7 +37,7 @@ const RecipeUploadPage: FC<{ navigation: any }> = ({ navigation }) => {
         }
 
         try {
-            const response = await axios.post('http://192.168.1.135:3000/recipe/upload-recipe', formData, {
+            const response = await axios.post('http://10.0.2.2:3000/recipe/upload-recipe', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

@@ -48,7 +48,7 @@ const UserDetailPage: FC<{ route: any, navigation: any }> = ({ route, navigation
     }
 
     const profilePictureUrl = user.profilePicture 
-        ? `http://192.168.1.135:3000/${user.profilePicture.replace(/\\/g, '/')}` 
+        ? `http://10.0.2.2:3000/${user.profilePicture.replace(/\\/g, '/')}` 
         : require('../assets/avatar.jpeg');        
 
     return (

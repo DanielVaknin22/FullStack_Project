@@ -21,7 +21,7 @@ const UserRecipesPage: FC<{ navigation: any }> = ({ navigation }) => {
                 console.error('User ID not found');
                 return;
             }
-            const response = await axios.get(`http://192.168.1.135:3000/recipe/${userId}`);
+            const response = await axios.get(`http://10.0.2.2:3000/recipe/${userId}`);
             setRecipes(response.data);
             setLoading(false);
         } catch (error) {
@@ -57,7 +57,7 @@ const UserRecipesPage: FC<{ navigation: any }> = ({ navigation }) => {
 
     const handleDeleteRecipe = async (recipeId: string) => {
         try {
-            await axios.delete(`http://192.168.1.135:3000/recipe/${recipeId}`);
+            await axios.delete(`http://10.0.2.2:3000/recipe/${recipeId}`);
             setRecipes(recipes.filter(recipe => recipe._id !== recipeId));
             alert('Recipe deleted successfully');
         } catch (error) {
