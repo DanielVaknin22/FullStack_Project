@@ -1,8 +1,9 @@
 import React, { FC, useEffect, useState } from 'react';
-import { View, Text, FlatList, Image, StyleSheet } from 'react-native';
+import { View, Text, FlatList, Image, StyleSheet, ActivityIndicator } from 'react-native';
 import axios from 'axios';
 import { User } from '../Model/UserModel';
 import * as SecureStore from 'expo-secure-store';
+import { useFocusEffect } from '@react-navigation/native';
 
 interface Recipe {
     _id: string;
@@ -15,20 +16,25 @@ interface Recipe {
 const AllRecipesPage: FC<{ navigation: any }> = ({ navigation }) => {
     const [recipes, setRecipes] = useState<Recipe[]>([]);
     const [user, setUser] = useState<User | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
 
-    useEffect(() => {
-        const fetchRecipes = async () => {
-            try {
-                const response = await axios.get('http://192.168.1.135:3000/recipe/recipes');
-                console.log('Fetched recipes:', response.data);
-                setRecipes(response.data);
-            } catch (error) {
-                console.error('Error fetching recipes:', error);
-            }
-        };
+    const fetchRecipes = async () => {
+        try {
+            const response = await axios.get('http://192.168.1.135:3000/recipe/recipes');
+            // console.log('Fetched recipes:', response.data);
+            setRecipes(response.data);
+        } catch (error) {
+            console.error('Error fetching recipes:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-        fetchRecipes();
-    }, [navigation]);
+    useFocusEffect(
+        React.useCallback(() => {
+            fetchRecipes();
+        }, [])
+    );
 
     useEffect(() => {
         fetchUserDetails();
@@ -41,16 +47,24 @@ const AllRecipesPage: FC<{ navigation: any }> = ({ navigation }) => {
             return;
         }
         try {
-            const response = await axios.get(`http://192.168.1.135/auth/user/${userId}`);
+            const response = await axios.get(`http://192.168.1.135:3000/auth/user/${userId}`);
             setUser(response.data);
         } catch (error) {
-            // console.error('Error fetching user details:', error);
+            console.error('Error fetching user details:', error);
         }
     };
 
     const profilePictureUrl = user?.profilePicture 
-    ? `http://10.0.2.2:3000/${user.profilePicture.replace(/\\/g, '/')}` 
-    : require('../assets/avatar.jpeg');
+        ? { uri: `http://192.168.1.135:3000/${user.profilePicture.replace(/\\/g, '/')}` }
+        : require('../assets/avatar.jpeg');
+
+    if (loading) {
+        return (
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#0000ff" />
+            </View>
+        );
+    }
 
     return (
         <View style={styles.container}>
@@ -61,21 +75,17 @@ const AllRecipesPage: FC<{ navigation: any }> = ({ navigation }) => {
                     <View style={styles.recipeContainer}>
                         <View style={styles.recipeDetails}>
                             <View style={styles.userContainer}>
-                            {profilePictureUrl ? (
-                                <Image style={styles.profilePicture} source={{ uri: profilePictureUrl }} />
-                            ) : (
-                                <Image style={styles.profilePicture} source={require('../assets/avatar.jpeg')} />
-                            )}
-                                <Text style={styles.fullName}> {user?.fullName}</Text>
+                                <Image style={styles.profilePicture} source={profilePictureUrl} />
+                                <Text style={styles.fullName}>{user?.fullName}</Text>
                             </View>
                             <Text style={styles.recipeName}>{item.name}</Text>
                             <Text style={styles.recipeDescription}>{item.description}</Text>
                             {item.image && (
-                            <Image 
-                                source={{ uri: `http://192.168.1.135:3000/${item.image.replace(/\\/g, '/')}` }} 
-                                style={styles.recipeImage} 
-                            />
-                        )}
+                                <Image 
+                                    source={{ uri: `http://192.168.1.135:3000/${item.image.replace(/\\/g, '/')}` }} 
+                                    style={styles.recipeImage} 
+                                />
+                            )}
                         </View>
                     </View>
                 )}
@@ -89,6 +99,11 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#ffffff',
         padding: 20,
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     recipeContainer: {
         flexDirection: 'row',
@@ -109,11 +124,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 10,
     },
-    userPhoto: {
-        width: 30,
-        height: 30,
-        borderRadius: 15,
-        marginRight: 10,
+    profilePicture: {
+        width: 50,
+        height: 50,
+        borderRadius: 50,
+        marginBottom: 20,
     },
     fullName: {
         fontSize: 20,
@@ -126,13 +141,6 @@ const styles = StyleSheet.create({
     },
     recipeDescription: {
         fontSize: 20,
-        // color: '',
-    },
-    profilePicture: {
-        width: 50,
-        height: 50,
-        borderRadius: 50,
-        marginBottom: 20,
     },
 });
 
