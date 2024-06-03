@@ -1,5 +1,5 @@
 import React, { useEffect, useState, FC } from 'react';
-import { StyleSheet, Text, View, Image, Button, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, Image, Button, ActivityIndicator, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { User } from '../Model/UserModel';
 import * as SecureStore from 'expo-secure-store';
@@ -70,10 +70,15 @@ const UserDetailPage: FC<{ route: any, navigation: any }> = ({ route, navigation
             ) : (
                 <Image style={styles.profilePicture} source={require('../assets/avatar.jpeg')} />
             )}
-            <Text style={styles.text}>Email: {user.email}</Text>
-            <Text style={styles.text}>Full Name: {user.fullName}</Text>
-            <Text style={styles.text}>Username: {user.username}</Text>
-            <Button title="Edit" onPress={handleEdit} />
+            <Text style={styles.text}>Email: <Text style={styles.textUser}>{user.email}</Text></Text>
+            <Text style={styles.text}>Full Name: <Text style={styles.textUser}>{user.fullName}</Text></Text>
+            <Text style={styles.text}>Username: <Text style={styles.textUser}>{user.username}</Text></Text>
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity style={[styles.button]} onPress={handleEdit}>
+                    <Text style={styles.buttonText}>✏️ Edit</Text>
+                </TouchableOpacity>
+
+            </View>        
         </View>
     );
 };
@@ -87,15 +92,38 @@ const styles = StyleSheet.create({
         backgroundColor: '#f5f5f5',
     },
     profilePicture: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
-        marginBottom: 20,
+        width: 300,
+        height: 300,
+        borderRadius: 150,
+        marginBottom: 50,
     },
     text: {
         fontSize: 18,
         marginBottom: 10,
+        color: '#666',
+        fontWeight: 'bold',
+
     },
+    buttonContainer: {
+        flexDirection: 'row',
+        marginTop: 20,
+    },
+    button: {
+        width: '40%',
+        borderRadius: 5,
+        paddingVertical: 10,
+        alignItems: 'center',
+        backgroundColor: '#666666b4',
+        marginHorizontal: 5,
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 16,
+        
+    },
+    textUser: {
+        fontWeight: 'normal',
+    }
 });
 
 export default UserDetailPage;
