@@ -1,5 +1,5 @@
 import React, { useEffect, useState, FC } from 'react';
-import { StyleSheet, Text, View, FlatList, Image, Button, Alert, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Image, Button, Alert, ActivityIndicator, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import { useFocusEffect } from '@react-navigation/native';
@@ -42,10 +42,12 @@ const UserRecipesPage: FC<{ navigation: any }> = ({ navigation }) => {
     useEffect(() => {
         navigation.setOptions({
             headerRight: () => (
-                <Button
+                <TouchableOpacity
                     onPress={() => navigation.navigate('RecipeUpload')}
-                    title="Add"
-                />
+                    style={styles.addButton}
+                >
+                    <Text style={styles.addButtonText}>Add Recipe 📝</Text>
+                </TouchableOpacity>
             ),
         });
     }, [navigation]);
@@ -68,7 +70,7 @@ const UserRecipesPage: FC<{ navigation: any }> = ({ navigation }) => {
     if (loading) {
         return (
             <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color="#0000ff" />
+                <ActivityIndicator size="large" color="#666" />
             </View>
         );
     }
@@ -86,11 +88,17 @@ const UserRecipesPage: FC<{ navigation: any }> = ({ navigation }) => {
                                 style={styles.image} 
                             />
                         )}
+                        <Text style={styles.fullname}>{item.fullname}</Text>
                         <Text style={styles.name}>{item.name}</Text>
                         <Text style={styles.description}>{item.description}</Text>
-                        <Text style={styles.fullname}>{item.fullname}</Text>
-                        <Button title="Edit" onPress={() => handleEditRecipe(item._id)} />
-                        <Button title="Delete" onPress={() => handleDeleteRecipe(item._id)} />
+                        <View style={styles.buttonContainer}>
+                            <TouchableOpacity style={[styles.button]} onPress={() => handleEditRecipe(item._id)}>
+                                <Text style={styles.buttonText}>✏️ Edit</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={[styles.button]} onPress={() => handleDeleteRecipe(item._id)}>
+                                <Text style={styles.buttonText}>🗑️ Delete</Text>
+                            </TouchableOpacity>
+            </View>
                     </View>
                 )}
             />
@@ -102,7 +110,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: '#f5f5f5',
+        backgroundColor: '#dddcdc',
     },
     loadingContainer: {
         flex: 1,
@@ -130,12 +138,40 @@ const styles = StyleSheet.create({
     },
     description: {
         fontSize: 16,
-        color: '#666',
     },
     fullname: {
         fontSize: 16,
         color: '#666',
+        fontWeight: 'bold',
     },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 10,
+    },
+    button: {
+        width: '40%',
+        borderRadius: 5,
+        paddingVertical: 10,
+        alignItems: 'center',
+        backgroundColor: '#666666b4',
+        marginHorizontal: 5,
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 16,
+    },
+    addButton: {
+        marginRight: 10,
+        padding: 10,
+        backgroundColor: '#666666b4',
+        borderRadius: 5,
+    },
+    addButtonText: {
+        color: '#fff',
+        fontSize: 18,
+    },
+
 });
 
 export default UserRecipesPage;
