@@ -1,5 +1,5 @@
 import React, { useState, FC } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, Image } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, Image, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 
@@ -9,6 +9,7 @@ const RegisterPage: FC<{ navigation: any }> = ({ navigation }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [profilePictureURI, setProfilePictureURI] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const selectProfilePicture = async () => {
         try {
@@ -49,6 +50,8 @@ const RegisterPage: FC<{ navigation: any }> = ({ navigation }) => {
             } as any);
         }
 
+        setLoading(true);
+
         try {
             const response = await axios.post('http://10.0.2.2:3000/auth/register', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
@@ -63,6 +66,8 @@ const RegisterPage: FC<{ navigation: any }> = ({ navigation }) => {
                 console.error('Error:', err);
                 Alert.alert('Error', 'Failed to register user');
             }
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -101,11 +106,15 @@ const RegisterPage: FC<{ navigation: any }> = ({ navigation }) => {
             </TouchableOpacity>
             {profilePictureURI ? (
                 <Image source={{ uri: profilePictureURI }} style={styles.profilePicture} />
-            ) :                 
+            ) : (
                 <Image source={require('../assets/avatar.jpeg')} style={styles.profilePicture} />
-        }
+            )}
             <TouchableOpacity style={styles.button} onPress={onRegister}>
-                <Text style={styles.buttonText}>REGISTER</Text>
+                {loading ? (
+                    <ActivityIndicator size="small" color="#fff" />
+                ) : (
+                    <Text style={styles.buttonText}>REGISTER</Text>
+                )}
             </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate('Login')}>
                 <Text style={styles.linkText}>Already have an account? Login</Text>

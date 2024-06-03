@@ -1,16 +1,15 @@
 import React, { useState, FC } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import axios from 'axios';
 import * as ImagePicker from 'expo-image-picker';
 import * as SecureStore from 'expo-secure-store';
 import { CommonActions } from '@react-navigation/native';
 
-
-
 const RecipeUploadPage: FC<{ navigation: any }> = ({ navigation }) => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [image, setImage] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
 
     const handleUpload = async () => {
         const userId = await SecureStore.getItemAsync('userId');
@@ -24,7 +23,6 @@ const RecipeUploadPage: FC<{ navigation: any }> = ({ navigation }) => {
         formData.append('description', description);
         formData.append('userId', userId);
 
-
         if (image) {
             const fileName = image.split('/').pop();
             const match = /\.(\w+)$/.exec(fileName || '');
@@ -35,6 +33,8 @@ const RecipeUploadPage: FC<{ navigation: any }> = ({ navigation }) => {
                 type: type,
             } as any);
         }
+
+        setLoading(true);
 
         try {
             const response = await axios.post('http://10.0.2.2:3000/recipe/upload-recipe', formData, {
@@ -53,6 +53,8 @@ const RecipeUploadPage: FC<{ navigation: any }> = ({ navigation }) => {
             );        
         } catch (error) {
             console.error('Error uploading recipe:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -102,7 +104,11 @@ const RecipeUploadPage: FC<{ navigation: any }> = ({ navigation }) => {
                 multiline
             />
             <Button title="Cancel" onPress={onCancel} />
-            <Button title="Upload Recipe" onPress={handleUpload} />
+            {loading ? (
+                <ActivityIndicator size="large" color="#0000ff" style={styles.activityIndicator} />
+            ) : (
+                <Button title="Upload Recipe" onPress={handleUpload} />
+            )}
         </View>
     );
 };
@@ -141,6 +147,9 @@ const styles = StyleSheet.create({
         borderColor: '#ccc',
         borderWidth: 1,
         borderRadius: 5,
+    },
+    activityIndicator: {
+        marginVertical: 20,
     },
 });
 

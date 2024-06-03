@@ -1,11 +1,12 @@
 import React, { useState, FC } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 
 const LoginPage: FC<{ navigation: any }> = ({ navigation }) => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
 
     const onLogin = async () => {
         if (email.trim() === '' || password.trim() === '') {
@@ -13,17 +14,21 @@ const LoginPage: FC<{ navigation: any }> = ({ navigation }) => {
             return;
         }
 
+        setLoading(true);
+
         try {
             const response = await axios.post('http://192.168.1.135:3000/auth/login', {
                 email,
                 password,
             });
-            const {userId, accessToken} = response.data;
+            const { userId, accessToken } = response.data;
             await SecureStore.setItemAsync('authToken', accessToken);
             await SecureStore.setItemAsync('userId', userId);
             navigation.navigate('MainApp', { screen: 'UserDetails', params: { userId } });
         } catch (err) {
             Alert.alert('Error', 'Invalid email or password');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -44,8 +49,12 @@ const LoginPage: FC<{ navigation: any }> = ({ navigation }) => {
                 value={password}
                 secureTextEntry
             />
-            <TouchableOpacity style={styles.button} onPress={onLogin}>
-                <Text style={styles.buttonText}>LOGIN</Text>
+            <TouchableOpacity style={styles.button} onPress={onLogin} disabled={loading}>
+                {loading ? (
+                    <ActivityIndicator size="small" color="#ffffff" />
+                ) : (
+                    <Text style={styles.buttonText}>LOGIN</Text>
+                )}
             </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate('Register')}>
                 <Text style={styles.linkText}>Don't have an account? Register</Text>

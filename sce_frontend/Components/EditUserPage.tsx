@@ -1,5 +1,5 @@
 import React, { useState, useEffect, FC } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import axios from 'axios';
 import * as ImagePicker from 'expo-image-picker';
 import { User } from '../Model/UserModel';
@@ -12,6 +12,8 @@ const EditUserPage: FC<{ route: any, navigation: any }> = ({ route, navigation }
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [profilePicture, setProfilePicture] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(true); // Loading state for fetching user details
+    const [updating, setUpdating] = useState<boolean>(false); // Loading state for updating user details
 
     useEffect(() => {
         const fetchUserDetails = async () => {
@@ -25,6 +27,8 @@ const EditUserPage: FC<{ route: any, navigation: any }> = ({ route, navigation }
                 setProfilePicture(userData.profilePicture ? `http://192.168.1.135:3000/${userData.profilePicture.replace(/\\/g, '/')}` : null);
             } catch (error) {
                 console.error('Error fetching user details:', error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -32,6 +36,7 @@ const EditUserPage: FC<{ route: any, navigation: any }> = ({ route, navigation }
     }, [userId]);
 
     const handleUpdate = async () => {
+        setUpdating(true);
         const formData = new FormData();
         formData.append('email', email);
         formData.append('fullName', fullName);
@@ -59,6 +64,8 @@ const EditUserPage: FC<{ route: any, navigation: any }> = ({ route, navigation }
             navigation.goBack();
         } catch (error) {
             console.error('Error updating user details:', error);
+        } finally {
+            setUpdating(false);
         }
     };
 
@@ -75,18 +82,25 @@ const EditUserPage: FC<{ route: any, navigation: any }> = ({ route, navigation }
             aspect: [4, 3],
             quality: 1,
         });
+
+        if (!result.canceled && result.assets.length > 0) {
+            setProfilePicture(result.assets[0].uri);
+        }
     };
 
-    if (!user) {
+    if (loading) {
         return (
-            <View style={styles.container}>
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#007BFF" />
                 <Text>Loading...</Text>
             </View>
         );
     }
+
     const onCancel = () => {
         navigation.goBack();
     };
+
     return (
         <View style={styles.container}>
             <TouchableOpacity onPress={pickImage}>
@@ -101,7 +115,13 @@ const EditUserPage: FC<{ route: any, navigation: any }> = ({ route, navigation }
             <TextInput style={styles.input} value={username} onChangeText={setUsername} placeholder="Username" />
             <TextInput style={styles.input} value={password} onChangeText={setPassword} placeholder="Password" secureTextEntry />
             <Button title="Cancel" onPress={onCancel} />
-            <Button title="Save" onPress={handleUpdate} />
+            <TouchableOpacity style={styles.button} onPress={handleUpdate} disabled={updating}>
+                {updating ? (
+                    <ActivityIndicator size="small" color="#ffffff" />
+                ) : (
+                    <Text style={styles.buttonText}>Save</Text>
+                )}
+            </TouchableOpacity>
         </View>
     );
 };
@@ -112,6 +132,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
+        backgroundColor: '#f5f5f5',
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
         backgroundColor: '#f5f5f5',
     },
     profilePicture: {
@@ -128,6 +154,20 @@ const styles = StyleSheet.create({
         borderColor: '#ccc',
         borderWidth: 1,
         borderRadius: 5,
+    },
+    button: {
+        height: 50,
+        backgroundColor: '#007BFF',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5,
+        marginVertical: 10,
+        width: '100%',
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 18,
+        fontWeight: 'bold',
     },
 });
 
