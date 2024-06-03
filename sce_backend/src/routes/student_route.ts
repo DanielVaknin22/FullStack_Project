@@ -7,7 +7,7 @@ import authMiddleware from "../common/auth_middleware";
 * @swagger
 * tags:
 *   name: Student
-*   description: The Authentication API
+*   description: The Student API
 */
 
 /**
@@ -23,19 +23,18 @@ import authMiddleware from "../common/auth_middleware";
 *       properties:
 *         _id:
 *           type: string
-*           description: The user id
+*           description: The student id
 *         name:
 *           type: string
-*           description: The user name
+*           description: The student name
 *         age:
 *           type: number
-*           description: The user age
+*           description: The student age
 *       example:
 *         _id: '12345'
-*         name: 'jhon'
+*         name: 'John'
 *         age: 25
 */
-
 
 /**
 * @swagger
@@ -47,7 +46,7 @@ import authMiddleware from "../common/auth_middleware";
 *       - bearerAuth: []
 *     responses:
 *       200:
-*         description: list of all the students
+*         description: List of all the students
 *         content:
 *           application/json:
 *             schema:
@@ -61,21 +60,21 @@ router.get("/", authMiddleware, studentController.get.bind(studentController));
  * @swagger
  * /student/{id}:
  *   get:
- *     summary: 'Get a student by ID'
+ *     summary: Get a student by ID
  *     tags: [Student]
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - in: 'path'
- *         name: 'id'
+ *       - in: path
+ *         name: id
  *         required: true
  *         schema:
- *           type: 'string'
+ *           type: string
  *           example: '12345'
- *         description: 'Unique ID of the student to retrieve'
+ *         description: Unique ID of the student to retrieve
  *     responses:
- *       '200':
- *         description: 'Student details'
+ *       200:
+ *         description: Student details
  *         content:
  *           application/json:
  *             schema:
@@ -87,7 +86,7 @@ router.get("/:id", authMiddleware, studentController.getById.bind(studentControl
  * @swagger
  * /student:
  *   post:
- *     summary: 'Create a new student'
+ *     summary: Create a new student
  *     tags: [Student]
  *     security:
  *       - bearerAuth: []
@@ -98,8 +97,8 @@ router.get("/:id", authMiddleware, studentController.getById.bind(studentControl
  *           schema:
  *             $ref: '#/components/schemas/Student'
  *     responses:
- *       '201':
- *         description: 'Student created successfully'
+ *       201:
+ *         description: Student created successfully
  *         content:
  *           application/json:
  *             schema:
@@ -107,8 +106,60 @@ router.get("/:id", authMiddleware, studentController.getById.bind(studentControl
  */
 router.post("/", authMiddleware, studentController.post.bind(studentController));
 
+/**
+ * @swagger
+ * /student/{id}:
+ *   put:
+ *     summary: Update a student by ID
+ *     tags: [Student]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: '12345'
+ *         description: Unique ID of the student to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Student'
+ *     responses:
+ *       200:
+ *         description: Student updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Student'
+ */
 router.put("/:id", authMiddleware, studentController.put.bind(studentController));
 
+/**
+ * @swagger
+ * /student/{id}:
+ *   delete:
+ *     summary: Delete a student by ID
+ *     tags: [Student]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: '12345'
+ *         description: Unique ID of the student to delete
+ *     responses:
+ *       200:
+ *         description: Student deleted successfully
+ *       404:
+ *         description: Student not found
+ */
 router.delete("/:id", authMiddleware, studentController.remove.bind(studentController));
 
 export default router;

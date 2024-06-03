@@ -2,7 +2,6 @@ import express from "express";
 import authController from "../controllers/auth_controller";
 const router = express.Router();
 import multer from "multer";
-// const upload = multer({ dest: 'uploads/' });
 import path from 'path';
 
 
