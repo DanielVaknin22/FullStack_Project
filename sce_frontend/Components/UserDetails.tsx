@@ -45,7 +45,7 @@ const UserDetailPage: FC<{ route: any, navigation: any }> = ({ route, navigation
     if (loading) {
         return (
             <View style={styles.container}>
-                <ActivityIndicator size="large" color="#0000ff" />
+                <ActivityIndicator size="large" color="#666" />
                 <Text>Loading...</Text>
             </View>
         );

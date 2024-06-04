@@ -88,13 +88,15 @@ const EditRecipePage: FC<{ route: any, navigation: any }> = ({ route, navigation
                 placeholder="Recipe Description"
                 multiline
             />
-            <Button title="Cancel" onPress={onCancel} />
             <TouchableOpacity style={styles.button} onPress={handleUpdateRecipe} disabled={updating}>
                 {updating ? (
                     <ActivityIndicator size="small" color="#ffffff" />
                 ) : (
-                    <Text style={styles.buttonText}>Update Recipe</Text>
+                    <Text style={styles.buttonText}>⬆️️ Update Recipe</Text>
                 )}
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={onCancel}>
+                <Text style={styles.buttonText}>❌ Cancel</Text>
             </TouchableOpacity>
         </View>
     );
@@ -119,7 +121,7 @@ const styles = StyleSheet.create({
         padding: 10,
         marginVertical: 10,
         backgroundColor: '#fff',
-        borderColor: '#ccc',
+        borderColor: '#666',
         borderWidth: 1,
         borderRadius: 5,
     },
@@ -131,7 +133,7 @@ const styles = StyleSheet.create({
     },
     button: {
         height: 50,
-        backgroundColor: '#007BFF',
+        backgroundColor: '#666666b4',
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 5,
@@ -141,7 +143,6 @@ const styles = StyleSheet.create({
     buttonText: {
         color: '#fff',
         fontSize: 18,
-        fontWeight: 'bold',
     },
 });
 

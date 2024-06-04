@@ -114,13 +114,16 @@ const EditUserPage: FC<{ route: any, navigation: any }> = ({ route, navigation }
             <TextInput style={styles.input} value={fullName} onChangeText={setFullName} placeholder="Full Name" />
             <TextInput style={styles.input} value={username} onChangeText={setUsername} placeholder="Username" />
             <TextInput style={styles.input} value={password} onChangeText={setPassword} placeholder="Password" secureTextEntry />
-            <Button title="Cancel" onPress={onCancel} />
+            {/* <Button title="Cancel" onPress={onCancel} /> */}
             <TouchableOpacity style={styles.button} onPress={handleUpdate} disabled={updating}>
                 {updating ? (
-                    <ActivityIndicator size="small" color="#ffffff" />
+                    <ActivityIndicator size="small" color="#666" />
                 ) : (
-                    <Text style={styles.buttonText}>Save</Text>
+                    <Text style={styles.buttonText}>✅ Save</Text>
                 )}
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={onCancel}>
+                <Text style={styles.buttonText}>❌ Cancel</Text>
             </TouchableOpacity>
         </View>
     );
@@ -141,9 +144,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#f5f5f5',
     },
     profilePicture: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
+        width: 200,
+        height: 200,
+        borderRadius: 100,
         marginBottom: 20,
     },
     input: {
@@ -151,13 +154,13 @@ const styles = StyleSheet.create({
         padding: 10,
         marginVertical: 10,
         backgroundColor: '#fff',
-        borderColor: '#ccc',
+        borderColor: '#666',
         borderWidth: 1,
         borderRadius: 5,
     },
     button: {
         height: 50,
-        backgroundColor: '#007BFF',
+        backgroundColor: '#666666b4',
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 5,
@@ -167,7 +170,6 @@ const styles = StyleSheet.create({
     buttonText: {
         color: '#fff',
         fontSize: 18,
-        fontWeight: 'bold',
     },
 });
 

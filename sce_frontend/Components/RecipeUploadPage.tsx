@@ -103,12 +103,17 @@ const RecipeUploadPage: FC<{ navigation: any }> = ({ navigation }) => {
                 placeholder="Recipe Description"
                 multiline
             />
-            <Button title="Cancel" onPress={onCancel} />
+            {/* <Button title="Cancel" onPress={onCancel} /> */}
+            <TouchableOpacity style={styles.button} onPress={handleUpload}>
             {loading ? (
-                <ActivityIndicator size="large" color="#0000ff" style={styles.activityIndicator} />
-            ) : (
-                <Button title="Upload Recipe" onPress={handleUpload} />
+                <ActivityIndicator size="large" color="#666" style={styles.activityIndicator} />
+            ) : ( 
+                <Text style={styles.buttonText}>⬆️️ Upload</Text>
             )}
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={onCancel}>
+                <Text style={styles.buttonText}>❌ Cancel</Text>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -125,31 +130,44 @@ const styles = StyleSheet.create({
         width: 200,
         height: 200,
         borderRadius: 10,
-        marginBottom: 20,
+        marginBottom: 30,
     },
     imagePlaceholder: {
         width: 200,
         height: 200,
         borderRadius: 10,
-        marginBottom: 20,
+        marginBottom: 30,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#ccc',
         textAlign: 'center',
         lineHeight: 200,
-        color: '#888',
+        color: '#666',
     },
     input: {
         width: '100%',
         padding: 10,
         marginVertical: 10,
         backgroundColor: '#fff',
-        borderColor: '#ccc',
+        borderColor: '#666',
         borderWidth: 1,
         borderRadius: 5,
     },
     activityIndicator: {
         marginVertical: 20,
+    },
+    button: {
+        height: 50,
+        backgroundColor: '#666666b4',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5,
+        marginVertical: 10,
+        width: '100%',
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 18,
     },
 });
 

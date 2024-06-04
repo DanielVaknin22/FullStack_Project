@@ -111,7 +111,7 @@ const RegisterPage: FC<{ navigation: any }> = ({ navigation }) => {
             )}
             <TouchableOpacity style={styles.button} onPress={onRegister}>
                 {loading ? (
-                    <ActivityIndicator size="small" color="#fff" />
+                    <ActivityIndicator size="small" color="#666" />
                 ) : (
                     <Text style={styles.buttonText}>REGISTER</Text>
                 )}
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
         height: 50,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#666',
+        backgroundColor: '#666666b4',
         borderRadius: 5,
         marginVertical: 10,
     },
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     },
     button: {
         height: 50,
-        backgroundColor: '#666',
+        backgroundColor: '#666666b4',
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 5,

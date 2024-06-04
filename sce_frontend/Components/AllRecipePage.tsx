@@ -50,7 +50,7 @@ const AllRecipesPage: FC<{ navigation: any }> = ({ navigation }) => {
     if (loading) {
         return (
             <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color="#0000ff" />
+                <ActivityIndicator size="large" color="#666" />
             </View>
         );
     }
@@ -108,33 +108,42 @@ const styles = StyleSheet.create({
         width: 350,
         height: 350,
         borderRadius: 10,
-        marginRight: 10,
+        margin: 10,
     },
     recipeDetails: {
         flex: 1,
+        borderWidth: 1,
+        borderColor: '#666',
+        borderRadius: 10,
     },
     userContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 10,
+        // marginBottom: 10,
+        borderBottomWidth: 1,
+        borderColor: '#6666662f',
     },
     profilePicture: {
         width: 50,
         height: 50,
         borderRadius: 50,
         marginRight: 10,
+        margin: 5,
     },
     fullName: {
         fontSize: 20,
         fontWeight: 'bold',
+        color: '#666',
     },
     recipeName: {
-        fontSize: 30,
+        fontSize: 25,
         fontWeight: 'bold',
         marginBottom: 5,
+        margin: 5,
     },
     recipeDescription: {
-        fontSize: 20,
+        fontSize: 18,
+        margin: 5,
     },
 });
 

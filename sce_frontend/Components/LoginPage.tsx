@@ -52,7 +52,7 @@ const LoginPage: FC<{ navigation: any }> = ({ navigation }) => {
             />
             <TouchableOpacity style={styles.button} onPress={onLogin} disabled={loading}>
                 {loading ? (
-                    <ActivityIndicator size="small" color="#ffffff" />
+                    <ActivityIndicator size="small" color="#666" />
                 ) : (
                     <Text style={styles.buttonText}>LOGIN</Text>
                 )}
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     },
     button: {
         height: 50,
-        backgroundColor: '#666',
+        backgroundColor: '#666666b4',
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 5,
