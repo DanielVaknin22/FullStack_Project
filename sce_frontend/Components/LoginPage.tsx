@@ -1,12 +1,38 @@
-import React, { useState, FC } from 'react';
-import {Image, StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect, FC } from 'react';
+import { Image, StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
+import * as Google from 'expo-auth-session/providers/google';
+import * as WebBrowser from 'expo-web-browser';
+
+WebBrowser.maybeCompleteAuthSession();
 
 const LoginPage: FC<{ navigation: any }> = ({ navigation }) => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
+
+    const [request, response, promptAsync] = Google.useAuthRequest({
+        clientId: 'YOUR_GOOGLE_CLIENT_ID',
+    });
+
+    useEffect(() => {
+        if (response?.type === 'success' && response.authentication) {
+            getUserInfo(response.authentication.accessToken);
+        }
+    }, [response]);
+
+    const getUserInfo = async (token: string) => {
+        try {
+            const response = await fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${token}`);
+            const user = await response.json();
+            await SecureStore.setItemAsync('authToken', token);
+            await SecureStore.setItemAsync('user', JSON.stringify(user));
+            navigation.replace('MainApp');
+        } catch (error) {
+            console.log('Error fetching user info', error);
+        }
+    };
 
     const onLogin = async () => {
         if (email.trim() === '' || password.trim() === '') {
@@ -34,8 +60,8 @@ const LoginPage: FC<{ navigation: any }> = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-        <Image source={require('../assets/IconFood.png')} style={styles.icon} />            
-        <Text style={styles.title}>Login To The Recipes App!</Text>
+            <Image source={require('../assets/IconFood.png')} style={styles.icon} />
+            <Text style={styles.title}>Login To The Recipes App!</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Email"
@@ -56,6 +82,9 @@ const LoginPage: FC<{ navigation: any }> = ({ navigation }) => {
                 ) : (
                     <Text style={styles.buttonText}>LOGIN</Text>
                 )}
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.googleButton} onPress={() => promptAsync()} disabled={!request}>
+                <Text style={styles.buttonText}>Login with Google</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate('Register')}>
                 <Text style={styles.linkText}>Don't have an account? Register</Text>
@@ -89,6 +118,14 @@ const styles = StyleSheet.create({
     button: {
         height: 50,
         backgroundColor: '#666666b4',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5,
+        marginVertical: 10,
+    },
+    googleButton: {
+        height: 50,
+        backgroundColor: '#db4437',
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 5,
