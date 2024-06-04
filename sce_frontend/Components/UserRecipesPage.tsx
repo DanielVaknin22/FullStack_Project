@@ -154,11 +154,13 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         paddingVertical: 10,
         alignItems: 'center',
-        backgroundColor: '#666666b4',
+        // backgroundColor: '#666666b4',
         marginHorizontal: 5,
+        borderWidth: 1,
+        borderColor: '#666',
     },
     buttonText: {
-        color: '#fff',
+        color: '#666',
         fontSize: 16,
     },
     addButton: {
