@@ -1,5 +1,5 @@
 import React, { useState, FC } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import {Image, StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 
@@ -34,7 +34,8 @@ const LoginPage: FC<{ navigation: any }> = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Login</Text>
+        <Image source={require('../assets/IconFood.png')} style={styles.icon} />            
+        <Text style={styles.title}>Login To The Recipes App!</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Email"
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 50,
-        borderColor: '#ccc',
+        borderColor: '#666',
         borderWidth: 1,
         borderRadius: 5,
         paddingHorizontal: 10,
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
     },
     button: {
         height: 50,
-        backgroundColor: '#007BFF',
+        backgroundColor: '#666',
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 5,
@@ -99,10 +100,16 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     linkText: {
-        color: '#007BFF',
+        color: '#666',
         fontSize: 16,
         textAlign: 'center',
         marginTop: 10,
+    },
+    icon: {
+        width: 200,
+        height: 200,
+        alignSelf: 'center',
+        marginVertical: 20,
     },
 });
 
