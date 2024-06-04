@@ -1,5 +1,5 @@
-import React, { useEffect, useState, FC } from 'react';
-import { StyleSheet, Text, View, Image, Button, ActivityIndicator, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState, FC, useLayoutEffect } from 'react';
+import { StyleSheet, Text, View, Image, ActivityIndicator, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { User } from '../Model/UserModel';
 import * as SecureStore from 'expo-secure-store';
@@ -10,14 +10,14 @@ const UserDetailPage: FC<{ route: any, navigation: any }> = ({ route, navigation
     const [loading, setLoading] = useState<boolean>(true);
 
     const fetchUserDetails = async () => {
-        const userId = await SecureStore.getItemAsync('userId');
-        if (!userId) {
+        const storedUserId = await SecureStore.getItemAsync('userId');
+        if (!storedUserId) {
             console.error('User ID not found');
             setLoading(false);
             return;
         }
         try {
-            const response = await axios.get(`http://10.0.2.2:3000/auth/user/${userId}`);
+            const response = await axios.get(`http://10.0.2.2:3000/auth/user/${storedUserId}`);
             setUser(response.data);
         } catch (error) {
             console.error('Error fetching user details:', error);
@@ -38,8 +38,23 @@ const UserDetailPage: FC<{ route: any, navigation: any }> = ({ route, navigation
         return unsubscribe;
     }, [navigation]);
 
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+                    <Text style={styles.buttonText}>Logout</Text>
+                </TouchableOpacity>
+            ),
+        });
+    }, [navigation]);
+
     const handleEdit = () => {
         navigation.navigate('EditUserPage', { userId });
+    };
+
+    const handleLogout = async () => {
+        await SecureStore.deleteItemAsync('userId');
+        navigation.replace('Login');
     };
 
     if (loading) {
@@ -65,19 +80,14 @@ const UserDetailPage: FC<{ route: any, navigation: any }> = ({ route, navigation
 
     return (
         <View style={styles.container}>
-            {profilePictureUrl ? (
-                <Image style={styles.profilePicture} source={{ uri: profilePictureUrl }} />
-            ) : (
-                <Image style={styles.profilePicture} source={require('../assets/avatar.jpeg')} />
-            )}
+            <Image style={styles.profilePicture} source={profilePictureUrl ? { uri: profilePictureUrl } : require('../assets/avatar.jpeg')} />
             <Text style={styles.text}>Email: <Text style={styles.textUser}>{user.email}</Text></Text>
             <Text style={styles.text}>Full Name: <Text style={styles.textUser}>{user.fullName}</Text></Text>
             <Text style={styles.text}>Username: <Text style={styles.textUser}>{user.username}</Text></Text>
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={[styles.button]} onPress={handleEdit}>
+                <TouchableOpacity style={styles.button} onPress={handleEdit}>
                     <Text style={styles.buttonText}>✏️ Edit</Text>
                 </TouchableOpacity>
-
             </View>        
         </View>
     );
@@ -92,21 +102,21 @@ const styles = StyleSheet.create({
         backgroundColor: '#f5f5f5',
     },
     profilePicture: {
-        width: 300,
-        height: 300,
-        borderRadius: 150,
-        marginBottom: 50,
+        width: 200,
+        height: 200,
+        borderRadius: 100,
+        marginBottom: 20,
     },
     text: {
         fontSize: 18,
         marginBottom: 10,
         color: '#666',
         fontWeight: 'bold',
-
     },
     buttonContainer: {
         flexDirection: 'row',
-        marginTop: 20,
+        justifyContent: 'space-between',
+        marginTop: 10,
     },
     button: {
         width: '40%',
@@ -119,7 +129,14 @@ const styles = StyleSheet.create({
     buttonText: {
         color: '#fff',
         fontSize: 16,
-        
+    },
+    logoutButton: {
+        width: '25%',
+        borderRadius: 5,
+        paddingVertical: 10,
+        alignItems: 'center',
+        backgroundColor: '#00a2ff',
+        marginHorizontal: 5,
     },
     textUser: {
         fontWeight: 'normal',

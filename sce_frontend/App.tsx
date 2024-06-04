@@ -1,4 +1,4 @@
-import { StyleSheet, StatusBar } from 'react-native';
+import { StyleSheet, StatusBar, Text } from 'react-native';
 import React, { FC } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -32,7 +32,7 @@ const StudentsListScreen: FC = () => {
       <StudentsListStack.Screen name="UserRecipesPage" component={UserRecipesPage} options={{ title: 'My Recipe' }} />
       <StudentsListStack.Screen name="EditRecipePage" component={EditRecipePage} options={{ title: 'Edit Recipe' }} />
       <StudentsListStack.Screen name="AllRecipesPage" component={AllRecipesPage} options={{ title: 'All Recipe' }} />
-
+      <StudentsListStack.Screen name="Logout" component={UserDetails} options={{ title: 'Logout' }} />
     </StudentsListStack.Navigator>
   );
 };
@@ -40,10 +40,30 @@ const StudentsListScreen: FC = () => {
 const MainApp: FC = () => {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="AllRecipesPage" component={AllRecipesPage} options={{ title: 'All Recipe' }} />
-      <Tab.Screen name="UserRecipesPage" component={UserRecipesPage} options={{ title: 'My Recipe' }} />
-      <Tab.Screen name="UserDetails" component={UserDetails} options={{ title: 'User Details' }} />
-
+      <Tab.Screen 
+        name="AllRecipesPage" 
+        component={AllRecipesPage} 
+        options={{ 
+          title: 'All Recipe', 
+          tabBarIcon: () => <Text style={{ fontSize: 24 }}>📋</Text> 
+        }} 
+      />
+      <Tab.Screen 
+        name="UserRecipesPage" 
+        component={UserRecipesPage} 
+        options={{ 
+          title: 'My Recipe', 
+          tabBarIcon: () => <Text style={{ fontSize: 24 }}>📝</Text> 
+        }} 
+      />
+      <Tab.Screen 
+        name="UserDetails" 
+        component={UserDetails} 
+        options={{ 
+          title: 'User Details', 
+          tabBarIcon: () => <Text style={{ fontSize: 24 }}>👤</Text> 
+        }} 
+      />
     </Tab.Navigator>
   );
 };
@@ -61,7 +81,7 @@ export default function App() {
         <Stack.Screen name="RecipeUpload" component={RecipeUpload} options={{ headerShown: false }} />
         <Stack.Screen name="EditRecipePage" component={EditRecipePage} options={{ headerShown: false }} />
         <Stack.Screen name="AllRecipesPage" component={AllRecipesPage} options={{ headerShown: false }} />
-
+        <Stack.Screen name="Logout" component={UserDetails} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

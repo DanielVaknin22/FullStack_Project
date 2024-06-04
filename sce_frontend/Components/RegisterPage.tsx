@@ -152,6 +152,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#666666b4',
         borderRadius: 5,
         marginVertical: 10,
+        width: 200,
+        margin: 80,
     },
     imagePickerText: {
         color: '#fff',
