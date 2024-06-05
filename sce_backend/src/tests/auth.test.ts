@@ -4,16 +4,16 @@ import mongoose from "mongoose";
 import { Express } from "express";
 import User from "../models/user_model";
 
-
 const user = {
     email: "teszt@gmail.com",
     password: "123456"
-}
+};
 
 let app: Express;
 let accessToken = "";
 let refreshToken = "";
 
+// Setup and Teardown
 beforeAll(async () => {
     app = await appInit();
     console.log("beforeAll");
@@ -25,7 +25,7 @@ afterAll(async () => {
     await mongoose.connection.close();
 });
 
-
+// Test Suite for Authentication
 describe("Auth test", () => {
     test("Post /register", async () => {
         const res = await request(app).post("/auth/register").send(user);
@@ -50,12 +50,11 @@ describe("Auth test", () => {
         expect(res3.statusCode).not.toBe(200);
     });
 
-
-    const timout = (ms: number) => {
+    const timeout = (ms: number) => {
         return new Promise((resolve) => {
             setTimeout(resolve, ms);
         });
-    }
+    };
 
     jest.setTimeout(100000);
 
@@ -64,7 +63,6 @@ describe("Auth test", () => {
         expect(res.statusCode).toBe(200);
         console.log(res.body);
 
-        //const accessToken = res.body.accessToken;
         refreshToken = res.body.refreshToken;
         const res2 = await request(app).get("/auth/refresh")
             .set('Authorization', 'Bearer ' + refreshToken)
@@ -79,13 +77,12 @@ describe("Auth test", () => {
         const res3 = await request(app).get("/student")
             .set('Authorization', 'Bearer ' + accessToken);
         expect(res3.statusCode).toBe(200);
-
-
     });
 
     test("refresh token after expiration", async () => {
-        //sleep 6 sec check if token is expired
-        await timout(6000);
+        // Wait for 6 seconds to simulate token expiration
+        await timeout(6000);
+
         const res = await request(app).get("/student")
             .set('Authorization', 'Bearer ' + accessToken);
         expect(res.statusCode).not.toBe(200);
@@ -110,7 +107,7 @@ describe("Auth test", () => {
             .set('Authorization', 'Bearer ' + refreshToken)
             .send();
         const oldRefreshToken = refreshToken;
-        if (oldRefreshToken == res.body.refreshToken) {
+        if (oldRefreshToken === res.body.refreshToken) {
             console.log("refresh token is the same");
         }
         expect(res.statusCode).toBe(200);
@@ -129,5 +126,4 @@ describe("Auth test", () => {
             .send();
         expect(res2.statusCode).not.toBe(200);
     });
-
 });
