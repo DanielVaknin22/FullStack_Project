@@ -13,7 +13,7 @@ const EditRecipePage: FC<{ route: any, navigation: any }> = ({ route, navigation
     useEffect(() => {
         const fetchRecipeDetails = async () => {
             try {
-                const response = await axios.get(`http://192.168.1.135:3000/recipe/${recipeId}`);
+                const response = await axios.get(`http://10.0.2.2:3000/recipe/${recipeId}`);
                 const recipes = response.data;
                 const recipe = recipes.find((r: any) => r._id === recipeId);
 
@@ -23,7 +23,7 @@ const EditRecipePage: FC<{ route: any, navigation: any }> = ({ route, navigation
 
                     setName(name);
                     setDescription(description);
-                    setImage(image ? `http://192.168.1.135:3000/${image.replace(/\\/g, '/')}` : null);
+                    setImage(image ? `http://10.0.2.2:3000/${image.replace(/\\/g, '/')}` : null);
                 } else {
                     console.error('Recipe not found');
                 }
@@ -42,7 +42,7 @@ const EditRecipePage: FC<{ route: any, navigation: any }> = ({ route, navigation
         formData.append('name', name);
         formData.append('description', description);
         try {
-            await axios.put(`http://192.168.1.135:3000/recipe/${recipeId}`, formData, {
+            await axios.put(`http://10.0.2.2:3000/recipe/${recipeId}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

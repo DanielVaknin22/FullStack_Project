@@ -19,13 +19,13 @@ const AllRecipesPage: FC<{ navigation: any }> = ({ navigation }) => {
 
     const fetchRecipes = async () => {
         try {
-            const response = await axios.get('http://192.168.1.135:3000/recipe/recipes');
+            const response = await axios.get('http://10.0.2.2:3000/recipe/recipes');
             const fetchedRecipes: Recipe[] = response.data;
 
             // Fetch user details for each recipe
             const recipesWithUserDetails = await Promise.all(fetchedRecipes.map(async (recipe) => {
                 try {
-                    const userResponse = await axios.get(`http://192.168.1.135:3000/auth/user/${recipe.userId}`);
+                    const userResponse = await axios.get(`http://10.0.2.2:3000/auth/user/${recipe.userId}`);
                     return { ...recipe, user: userResponse.data };
                 } catch (error) {
                     console.error(`Error fetching user details for user ID ${recipe.userId}:`, error);
@@ -67,7 +67,7 @@ const AllRecipesPage: FC<{ navigation: any }> = ({ navigation }) => {
                                 <Image 
                                     style={styles.profilePicture} 
                                     source={item.user && item.user.profilePicture 
-                                        ? { uri: `http://192.168.1.135:3000/${item.user.profilePicture.replace(/\\/g, '/')}` }
+                                        ? { uri: `http://10.0.2.2:3000/${item.user.profilePicture.replace(/\\/g, '/')}` }
                                         : require('../assets/avatar.jpeg')} 
                                 />
                                 <Text style={styles.fullName}>{item.user?.fullName}</Text>
@@ -76,7 +76,7 @@ const AllRecipesPage: FC<{ navigation: any }> = ({ navigation }) => {
                             <Text style={styles.recipeDescription}>{item.description}</Text>
                             {item.image && (
                                 <Image 
-                                    source={{ uri: `http://192.168.1.135:3000/${item.image.replace(/\\/g, '/')}` }} 
+                                    source={{ uri: `http://10.0.2.2:3000/${item.image.replace(/\\/g, '/')}` }} 
                                     style={styles.recipeImage} 
                                 />
                             )}

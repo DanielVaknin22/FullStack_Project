@@ -23,7 +23,7 @@ const UserRecipesPage: FC<{ navigation: any }> = ({ navigation }) => {
                 console.error('User ID not found');
                 return;
             }
-            const response = await axios.get(`http://192.168.1.135:3000/recipe/user/${userId}`);
+            const response = await axios.get(`http://10.0.2.2:3000/recipe/user/${userId}`);
             setRecipes(response.data);
         } catch (error) {
             console.error('Error fetching recipes:', error);
@@ -58,7 +58,7 @@ const UserRecipesPage: FC<{ navigation: any }> = ({ navigation }) => {
 
     const handleDeleteRecipe = async (recipeId: string) => {
         try {
-            await axios.delete(`http://192.168.1.135:3000/recipe/${recipeId}`);
+            await axios.delete(`http://10.0.2.2:3000/recipe/${recipeId}`);
             setRecipes(recipes.filter(recipe => recipe._id !== recipeId));
             Alert.alert('Success', 'Recipe deleted successfully');
         } catch (error) {
@@ -84,7 +84,7 @@ const UserRecipesPage: FC<{ navigation: any }> = ({ navigation }) => {
                     <View style={styles.recipeItem}>
                         {item.image && (
                             <Image 
-                                source={{ uri: `http://192.168.1.135:3000/${item.image.replace(/\\/g, '/')}` }} 
+                                source={{ uri: `http://10.0.2.2:3000/${item.image.replace(/\\/g, '/')}` }} 
                                 style={styles.image} 
                             />
                         )}

@@ -12,8 +12,8 @@ const EditUserPage: FC<{ route: any, navigation: any }> = ({ route, navigation }
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [profilePicture, setProfilePicture] = useState<string | null>(null);
-    const [loading, setLoading] = useState<boolean>(true); // Loading state for fetching user details
-    const [updating, setUpdating] = useState<boolean>(false); // Loading state for updating user details
+    const [loading, setLoading] = useState<boolean>(true); 
+    const [updating, setUpdating] = useState<boolean>(false);
 
     useEffect(() => {
         const fetchUserDetails = async () => {
@@ -24,7 +24,7 @@ const EditUserPage: FC<{ route: any, navigation: any }> = ({ route, navigation }
                 setEmail(userData.email);
                 setFullName(userData.fullName);
                 setUsername(userData.username);
-                setProfilePicture(userData.profilePicture ? `http://192.168.1.135:3000/${userData.profilePicture.replace(/\\/g, '/')}` : null);
+                setProfilePicture(userData.profilePicture ? `http://10.0.2.2:3000/${userData.profilePicture.replace(/\\/g, '/')}` : null);
             } catch (error) {
                 console.error('Error fetching user details:', error);
             } finally {
